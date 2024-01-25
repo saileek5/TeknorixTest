@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/listFragment">
+
+    <fragment
+        android:id="@+id/listFragment"
+        android:name="com.test.teknorix.ui.List.ListFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_list" >
+        <action
+            android:id="@+id/action_listFragment_to_listDetailFragment"
+            app:destination="@id/listDetailFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out"
+            app:popUpTo="@id/listFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/listDetailFragment"
+        android:name="com.test.teknorix.ui.List.ListDetailFragment"
+        android:label="fragment_list_detail"
+        tools:layout="@layout/fragment_list_detail" />
+</navigation>
