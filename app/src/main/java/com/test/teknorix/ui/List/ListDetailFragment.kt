@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
@@ -31,7 +32,7 @@ class ListDetailFragment : Fragment() {
         val string = arguments?.getString("user")
         val user =Gson().fromJson(string, User::class.java)
         binding.toolbar.toolbar.title = user.first_name + " " + user.last_name
-        binding.toolbar.toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_arrow)
+        binding.toolbar.toolbar.navigationIcon = context?.let { ContextCompat.getDrawable(it, R.drawable.ic_arrow) }
         binding.toolbar.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }

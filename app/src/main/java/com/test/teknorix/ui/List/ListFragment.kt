@@ -58,10 +58,9 @@ class ListFragment : Fragment(), UsersPagingAdapter.ClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         val loadCount = preferenceHelper.getAppLoadCount()
-//        binding.toolbar.toolbar.title = getString(R.string.user_title)
 
         /**Setting title to Toolbar with the count from shared preferences*/
-        binding.toolbar.toolbar.title = "App Loading Count: $loadCount"
+        binding.toolbar.toolbar.title = getString(R.string.user_title, loadCount)
         binding.recycleView.layoutManager = LinearLayoutManager(context)
         binding.recycleView.setHasFixedSize(true)
 
@@ -73,7 +72,7 @@ class ListFragment : Fragment(), UsersPagingAdapter.ClickListener {
             binding.pbLoading.isVisible = false
             binding.btnRetry.isVisible = false
             binding.tvMessage.isVisible = isEmptyList
-            binding.tvMessage.text = "Oops users are not available!"
+            binding.tvMessage.text = getString(R.string.text_empty)
             binding.recycleView.isVisible = loadState.refresh is LoadState.NotLoading
 
             if (loadState.refresh is LoadState.Loading || loadState.append is LoadState.Loading) {
