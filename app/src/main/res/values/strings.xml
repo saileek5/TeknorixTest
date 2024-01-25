@@ -8,4 +8,6 @@
     <string name="email">Email</string>
     <string name="no_network">Oops! Something went wrong \n Please check your internet connection</string>
     <string name="error">Oops! Something went wrong \n Please try after sometime</string>
+    <string name="user_title">User Listing</string>
+<!--    <string name="user_title">App Loading Count: </string>-->
 </resources>

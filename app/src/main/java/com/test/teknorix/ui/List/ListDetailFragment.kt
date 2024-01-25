@@ -27,6 +27,7 @@ class ListDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        /** fetching the passed data from navigation bundle */
         val string = arguments?.getString("user")
         val user =Gson().fromJson(string, User::class.java)
         binding.toolbar.toolbar.title = user.first_name + " " + user.last_name

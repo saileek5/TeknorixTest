@@ -1,15 +1,11 @@
 package com.test.teknorix.repository.paging
 
-import android.content.Context
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.test.teknorix.repository.model.User
-import com.test.teknorix.util.NetworkUtils
 import com.test.teknorix.repository.api.ApiService
 import retrofit2.HttpException
 import java.io.IOException
-import java.lang.Exception
 import java.net.UnknownHostException
 
 class UsersPagingSource(private val apiService: ApiService) :

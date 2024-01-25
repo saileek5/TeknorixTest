@@ -1,5 +1,6 @@
 package com.test.teknorix.repository.api
 
+import com.test.teknorix.util.Constants
 import okhttp3.ConnectionPool
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -13,7 +14,7 @@ import java.util.concurrent.TimeUnit
 class ApiHelper {
 
     companion object {
-        private const val BASE_URL = "https://reqres.in/"
+        private const val BASE_URL = Constants.BASE_URL
 
         private val interceptor: HttpLoggingInterceptor = HttpLoggingInterceptor()
             .setLevel(HttpLoggingInterceptor.Level.BASIC)

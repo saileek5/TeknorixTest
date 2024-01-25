@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
@@ -30,9 +29,7 @@ import kotlinx.coroutines.launch
 class ListFragment : Fragment(), UsersPagingAdapter.ClickListener {
 
     private lateinit var userListVM: UserListVM
-//    private var userList: List<User> = emptyList()
     private lateinit var binding: FragmentListBinding
-    private lateinit var adapter: UsersPagingAdapter
     private lateinit var livePagingData: LiveData<PagingData<User>>
 
     private val preferenceHelper: PrefsHelper by lazy { PreferenceManager(requireContext()) }
@@ -51,6 +48,8 @@ class ListFragment : Fragment(), UsersPagingAdapter.ClickListener {
         val repository = (context?.applicationContext as MyApp).repository
         userListVM = ViewModelProvider(this, UserListVMFactory(repository)).get(UserListVM::class.java)
         lifecycleScope.launch {
+             /**Storing the live paging data from view model in onAttach so that the api call is not
+             made once the fragment comes back to foreground from back stack*/
             livePagingData = userListVM.userList()
         }
     }
@@ -58,12 +57,11 @@ class ListFragment : Fragment(), UsersPagingAdapter.ClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var dataValue2 = MyApp().getSharedPref(requireContext())?.getInt("data", 0)
-        var loadCount = preferenceHelper.getAppLoadCount()
-        binding.toolbar.toolbar.title = "User Listing "
-        if (loadCount != null) {
-            binding.toolbar.toolbar.title = "App Loading Count: $loadCount"
-        }
+        val loadCount = preferenceHelper.getAppLoadCount()
+//        binding.toolbar.toolbar.title = getString(R.string.user_title)
+
+        /**Setting title to Toolbar with the count from shared preferences*/
+        binding.toolbar.toolbar.title = "App Loading Count: $loadCount"
         binding.recycleView.layoutManager = LinearLayoutManager(context)
         binding.recycleView.setHasFixedSize(true)
 
@@ -92,7 +90,7 @@ class ListFragment : Fragment(), UsersPagingAdapter.ClickListener {
 //                    binding.tvMessage.text = it.error.toString()
                     binding.tvMessage.isVisible = true
                     binding.btnRetry.isVisible = true
-                    if(!NetworkUtils.isInternetAvailable(requireContext())){
+                    if (!NetworkUtils.isInternetAvailable(requireContext())) {
                         binding.tvMessage.text = getString(R.string.no_network)
                     } else {
                         binding.tvMessage.text = getString(R.string.error)
@@ -100,32 +98,33 @@ class ListFragment : Fragment(), UsersPagingAdapter.ClickListener {
                 }
             }
         }
-        adapter.withLoadStateHeaderAndFooter(
-            header = UserListLoadStateAdapter { adapter.retry() },
-            footer = UserListLoadStateAdapter { adapter.retry() }
-        )
         binding.recycleView.adapter = adapter.withLoadStateHeaderAndFooter(
             header = UserListLoadStateAdapter { adapter.retry() },
             footer = UserListLoadStateAdapter { adapter.retry() }
         )
 
+        /** observing saved live paging data */
         livePagingData.observe(viewLifecycleOwner) {
             it?.let {
+                /** submitting new data to paging adapter */
                 adapter.submitData(lifecycle, it)
             }
         }
 
         binding.btnRetry.setOnClickListener {
+            /** retry for paging adapter */
             adapter.retry()
         }
 
         binding.container.setOnRefreshListener {
+            /** pull down to refresh functionality  */
             binding.container.isRefreshing = true
             adapter.refresh()
         }
     }
 
     override fun onClick(user: User, position: Int) {
+        /** navigating to details fragment and passing selected user data */
         val bundle = Bundle()
         bundle.putString("user", Gson().toJson(user))
         findNavController().navigate(R.id.action_listFragment_to_listDetailFragment, bundle)

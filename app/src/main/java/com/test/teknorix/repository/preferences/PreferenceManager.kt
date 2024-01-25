@@ -1,6 +1,5 @@
 package com.test.teknorix.repository.preferences
 
-import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import com.test.teknorix.util.Constants
